@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Note taking WebAPP</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        width: 100%;
+        /* overflow-x: hidden; */
+      }
+
+      header {
+        /* background-color: #333; */
+        /* background-color: blue; */
+        background-color: rgb(242, 180, 1);
+        height: 70px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 30px;
+      }
+
+      #container {
+        height: 60px;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        position: relative;
+        background-color: rgb(230, 230, 230);
+        position: sticky;
+        top: 0px;
+        z-index: 3;
+      }
+      #create_note_btn {
+        height: 40px;
+        width: 100px;
+        border: 1px solid gray;
+        border-radius: 25px;
+        /* background-color: #007bff; */
+        /* color: white; */
+        background-color: rgb(242, 180, 1);
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #create_note_btn:hover {
+        #plus {
+          font-size: 35px;
+        }
+      }
+
+      #plus {
+        margin-left: 3px;
+        font-size: 21px;
+      }
+      #note_icon {
+        font-size: 37px;
+        margin-right: 20px;
+        margin-left: 10px;
+      }
+      #search_box {
+        position: absolute;
+        right: 100px;
+        background-color: gray;
+        display: flex;
+        flex-direction: row;
+        column-gap: 0px;
+      }
+      #search_input {
+        height: 30px;
+        width: 240px;
+        padding-left: 5px;
+        outline: none;
+        background-color: white;
+        border: 1px solid black;
+      }
+      #search_btn {
+        height: 30px;
+        width: 70px;
+        border-radius: 15px;
+        border: 1px solid gray;
+      }
+      #search_btn:hover {
+        background-color: green;
+        color: white;
+      }
+      #delete_all {
+        position: absolute;
+        right: 20px;
+        height: 30px;
+        width: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #delete_all:hover {
+        background-color: red;
+        color: white;
+      }
+
+      #notes_container {
+        height: auto;
+        width: 99.3%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        padding-left: 10px;
+        background-color: rgb(244, 244, 244);
+      }
+      .notes {
+        max-height: 250px;
+        min-height: 200px;
+        max-width: 400px;
+        width: 200px;
+        flex-grow: 1;
+        border: 1px solid gray;
+        box-shadow: 2px 3px rgb(192, 188, 188);
+        margin-right: 10px;
+        margin-bottom: 10px;
+        word-break: break-all;
+        overflow: hidden;
+        position: relative;
+      }
+      /* h3 {
+        background-color: gray;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      } */
+      /* textarea {
+        min-height: 100%;
+        width: inherit;
+        outline: none;
+        font-size: 16px;
+      }
+      input {
+        height: 30px;
+        width: 200px;
+        outline: none;
+        font-size: 18px;
+        font-weight: bold;
+        background-color: yellow;
+        color: black;
+      } */
+      .dlt {
+        height: 30px;
+        width: 25px;
+        position: absolute;
+        bottom: 0%;
+        right: 0%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        padding: 1px;
+      }
+      .dlt:hover {
+        background-color: red;
+        color: white;
+      }
+      .edit {
+        height: 30px;
+        width: 25px;
+        position: absolute;
+        bottom: 0%;
+        right: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        padding: 1px;
+      }
+      .edit:hover {
+        background-color: yellow;
+      }
+      #writing_area {
+        height: 200px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 10px;
+        /* background-color: red; */
+        margin-bottom: 5px;
+        /* display: none; */
+      }
+      #pre_heading {
+        height: 20%;
+        outline: none;
+        width: 50%;
+        font-weight: bold;
+        font-size: 16px;
+        /* border-radius: 10px; */
+        margin-top: 5px;
+        border: 1px solid gray;
+        padding-left: 5px;
+      }
+      #add_btn_container {
+        display: flex;
+        flex-direction: row;
+        height: 80%;
+        width: 50%;
+        border: 1px solid gray;
+        position: relative;
+      }
+      #pre_writing_area {
+        height: 100%;
+        outline: none;
+        width: 100%;
+        font-size: 16px;
+        margin-bottom: 5px;
+        border: 0px;
+        padding: 3px;
+      }
+      #add_note_btn {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        height: 25px;
+        width: 70px;
+        padding: 1px;
+        background-color: blue;
+        color: white;
+        border: none;
+        border-radius: 5px 0px 0px 0px;
+      }
+      .note_final_heading {
+        height: 13%;
+        width: 100%;
+        background-color: rgb(200, 200, 200);
+        word-break: none;
+
+        /* background-color: rgb(199, 199, 199); */
+        /* background-color: #f5f5f5; */
+        /* background-color: rgb(156, 153, 153); */
+      }
+      .note_final_text {
+        height: 87%;
+        width: 100%;
+        /* background-color: #f8e473; */
+        /* background-color: #ffffcc; */
+        background-color: rgb(242, 180, 1);
+        border: none;
+        outline: none;
+      }
+      @media (max-width: 530px) {
+        /* #search_input {
+          width: 150px;
+        } */
+        #pre_heading {
+          width: 100%;
+        }
+        #add_btn_container {
+          width: 100%;
+        }
+        #search_box {
+          right: 100px;
+        }
+        #pre-writing_area {
+          width: 100%;
+          /* background-color: red; */
+        }
+        #writing_area {
+          width: 100%;
+          align-items: center;
+          padding-left: 5px;
+          padding-right: 5px;
+        }
+      }
+      @media (max-width: 580px) {
+        #search_input {
+          width: 150px;
+        }
+      }
+      @media (max-width: 490px) {
+        #search_input {
+          width: 100px;
+        }
+      }
+      @media (max-width: 440px) {
+        #search_btn {
+          width: 40px;
+          border-radius: 10px;
+          font-size: 10px;
+        }
+        #search_input {
+          width: 80px;
+        }
+      }
+      @media (max-width: 420px) {
+        #notes_container {
+          justify-content: center;
+        }
+      }
+      @media (max-width: 390px) {
+        #create_note_btn {
+          width: 75px;
+          height: 30px;
+          font-size: 12px;
+        }
+        #note_icon {
+          margin-right: 10px;
+        }
+      }
+      @media (max-width: 355px) {
+        #delete_all {
+          right: 5px;
+        }
+        #search_box {
+          right: 80px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>Note Taking WebApp</header>
+
+    <main>
+      <div id="container">
+        <i class="fa-regular fa-note-sticky" id="note_icon"></i>
+        <button id="create_note_btn" onclick="create_note()">
+          New Note <span id="plus">+</span>
+        </button>
+        <div id="search_box">
+          <input
+            type="search"
+            name=""
+            id="search_input"
+            placeholder="Search..."
+          />
+          <button id="search_btn">Search</button>
+        </div>
+        <button id="delete_all" onclick="delete_all()">Delete all</button>
+      </div>
+      <div id="writing_area">
+        <input type="text" name="" id="pre_heading" placeholder="Heading..." />
+        <div id="add_btn_container">
+          <textarea id="pre_writing_area" placeholder="Note..."></textarea>
+          <button id="add_note_btn" onclick="add_note()">Add Note</button>
+        </div>
+      </div>
+      <hr />
+
+      <div id="notes_container">
+        <!-- <div class="notes">
+          <h3 class="note_final_heading"></h3>
+          <textarea class="note_final_text"></textarea>
+          <button onclick="delete_note()" class="dlt">Delete</button>
+        </div> -->
+      </div>
+    </main>
+
+    <footer></footer>
+
+    <script>
+      // create note is sucessfully DONE......
+
+      show_notes();
+
+      function add_note() {
+        let heading_text = document.getElementById("pre_heading").value;
+        let note_text = document.getElementById("pre_writing_area").value;
+        // console.log(heading_text, note_text);
+        let all_keys = Object.keys(localStorage);
+        if (heading_text && all_keys.includes(heading_text)) {
+          var ans = alert(
+            "This same heading is already Exist , please make it unique to Save it"
+          );
+          // console.log(ans);
+        } else {
+          var ans = true;
+        }
+
+        if (ans) {
+          let grand_parent = document.getElementById("notes_container");
+
+          let parent_div = document.createElement("div");
+          parent_div.setAttribute("class", "notes");
+          parent_div.innerHTML =
+            '<h3 class="note_final_heading" readonly>' +
+            heading_text +
+            '</h3><textarea class="note_final_text" readonly>' +
+            note_text +
+            '</textarea><button title="Edit" onclick="edit()" class="edit"><i class="fa-solid fa-pen-to-square"></i></button><button title="Delete" onclick="delete_note()" class="dlt"><i class="fa-solid fa-trash"></i></button>';
+
+          grand_parent.insertBefore(parent_div, grand_parent.childNodes[0]);
+          // console.log(grand_parent);
+
+          //store the Note in Local storage...
+          localStorage.setItem(heading_text, note_text);
+
+          refresh();
+
+          document
+            .getElementById("writing_area")
+            .style.setProperty("display", "none");
+        }
+      }
+
+      // delete a note from note container...
+      function delete_note() {
+        const delete_button = document.querySelectorAll(".dlt");
+        delete_button.forEach((button) => {
+          button.addEventListener("click", function () {
+            const parent_container = this.closest(".notes");
+            var first_child = parent_container.childNodes;
+            localStorage.removeItem(first_child[0].innerText);
+
+            if (parent_container) {
+              parent_container.remove();
+            }
+          });
+        });
+
+        // now delete the note from local storage also..
+      }
+
+      // show note function -- create note
+      function create_note() {
+        let new_note = document.getElementById("writing_area");
+        new_note.style.setProperty("display", "flex");
+      }
+
+      //function to show all the notes even after refresh
+      function show_notes() {
+        //sucessfully retrived all the Key Value pairs...
+        const all_keys = Object.keys(localStorage);
+        const reversed_keys = all_keys.slice().reverse();
+        // console.log(all_keys);
+        reversed_keys.forEach((val) => {
+          // console.log(localStorage.getItem(val));
+
+          let daddu = document.getElementById("notes_container");
+          let papa_div = document.createElement("div");
+          papa_div.setAttribute("class", "notes");
+          papa_div.innerHTML =
+            '<h3 class="note_final_heading" readonly>' +
+            val +
+            '</h3><textarea class="note_final_text" readonly>' +
+            localStorage.getItem(val) +
+            '</textarea><button title="Edit" onclick="edit()" class="edit"><i class="fa-solid fa-pen-to-square"></i></button><button title="Delete" onclick="delete_note()" class="dlt"><i class="fa-solid fa-trash"></i></button>';
+
+          daddu.insertBefore(papa_div, daddu.childNodes[0]);
+        });
+      }
+
+      // lets make a function to hide all the unnecessary notes
+      function hide() {
+        document.getElementById("notes_container").innerHTML = " ";
+        let new_note = document.getElementById("writing_area");
+        new_note.style.setProperty("display", "none");
+      }
+
+      // add a event listner for seach input
+      let input_box = document.getElementById("search_input");
+      input_box.addEventListener("input", search);
+
+      // search function to filter results...
+      function search() {
+        hide();
+
+        let search_text = document.getElementById("search_input");
+        console.log(search_text.value);
+
+        if (search_text.value != "") {
+          let all_keys = Object.keys(localStorage);
+
+          all_keys.forEach((val) => {
+            const item = localStorage.getItem(val);
+            if (
+              (item && item.includes(search_text.value)) ||
+              val.includes(search_text.value)
+            ) {
+              // console.log(item);
+              let daddu = document.getElementById("notes_container");
+              let papa_div = document.createElement("div");
+              papa_div.setAttribute("class", "notes");
+              papa_div.innerHTML =
+                '<h3 class="note_final_heading" readonly>' +
+                val +
+                '</h3><textarea class="note_final_text" readonly>' +
+                localStorage.getItem(val) +
+                '</textarea><button title="Edit" onclick="edit()" class="edit"><i class="fa-solid fa-pen-to-square"></i></button><button title="Delete" onclick="delete_note()" class="dlt"><i class="fa-solid fa-trash"></i></button>';
+
+              daddu.insertBefore(papa_div, daddu.childNodes[0]);
+            } else {
+              console.log("DID NOT FOUND");
+            }
+          });
+        } else {
+          show_notes();
+        }
+      }
+
+      //refresh input box
+      function refresh() {
+        const input_heading = document.getElementById("pre_heading");
+        const input_text = document.getElementById("pre_writing_area");
+        input_heading.value = "";
+        input_text.value = "";
+      }
+
+      //edit function
+      function edit() {
+        const edit_button = document.querySelectorAll(".edit");
+        edit_button.forEach((val) => {
+          val.addEventListener("click", function () {
+            const upper_div = this.closest(".notes");
+
+            const parent_container_for_dlt = this.closest(".notes");
+
+            var childs = upper_div.childNodes;
+            let edit_heading = childs[0].innerText;
+            let edit_text = childs[1].value;
+
+            // console.log(edit_heading);
+            // console.log(edit_text);
+
+            let new_note = document.getElementById("writing_area");
+            new_note.style.setProperty("display", "flex");
+
+            const input_heading_for_edit =
+              document.getElementById("pre_heading");
+            const input_text_for_edit =
+              document.getElementById("pre_writing_area");
+            input_heading_for_edit.value = edit_heading;
+            input_text_for_edit.value = edit_text;
+
+            // delete the existing wrong note when we want to edit it
+            if (parent_container_for_dlt) {
+              localStorage.removeItem(edit_heading);
+              parent_container_for_dlt.remove();
+            }
+          });
+        });
+      }
+
+      //function to delete all
+      function delete_all() {
+        let msg = confirm("Are you sure to delete ?");
+        if (msg) {
+          localStorage.clear();
+          const delete_all_container =
+            document.getElementById("notes_container");
+          delete_all_container.innerHTML = "";
+        } else {
+        }
+      }
+    </script>
+  </body>
+</html>
